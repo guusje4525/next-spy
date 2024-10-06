@@ -6,7 +6,7 @@ import useRefFn from './useRefFn'
 export type useStoreInitializer<T> = () => T
 export type useStoreWithPropsInitializer<T, P> = (sourceProps: P) => T
 
-export interface IStoreWithReactions extends AnyObject {
+export interface IStoreWithReactions {
    configureReactions: (reactionsStore: DisposableReactionsStore) => any
 }
 
