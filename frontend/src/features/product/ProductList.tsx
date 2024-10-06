@@ -20,9 +20,16 @@ const ProductList = observer(function ProductList() {
       {productListStore.products.map(product => <React.Fragment key={product.id}>
         <ListItem secondaryAction={<ProductDeleteDialog id={product.id} />}>
           <ListItemText
-            primary={<Typography sx={{ color: '#888' }}>{product.name}</Typography>}
+            primary={<Typography
+              sx={{ color: '#888', textDecoration: 'none' }}
+              component="a"
+              target="_blank"
+              rel="noopener noreferrer"
+              href={`https://pricespy.co.nz/product.php?p=${product.id}`}>
+              {product.name}
+            </Typography>}
             secondary={
-              <Typography variant="body2" sx={{ color: '#888', display: 'inline' }}>
+              <Typography variant="body2" sx={{ color: '#888' }}>
                 {product.price === 0 ? 'No price data found' : `$${product.price}`}
               </Typography>
             }
