@@ -2,6 +2,7 @@ import { makeAutoObservable, runInAction } from "mobx"
 import { ProductEntityType } from "../../../../backend/database/entities/product"
 import apiClient from '../../api'
 import { createStoreContext } from "../../utils/storeUtils"
+import { formatDate } from "../../utils/DateUtils"
 
 export default class ProductListStore {
     products: ProductEntityType[] = []
@@ -12,14 +13,7 @@ export default class ProductListStore {
     }
 
     get lastUpdatedText() {
-        return new Date(this.products[0].lastUpdatedAt).toLocaleString('en-GB', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: false
-        })
+        return formatDate(this.products[0].lastUpdatedAt)
     }
 
     fetch = async () => {
