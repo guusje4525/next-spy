@@ -14,11 +14,11 @@ export const handler = async () => {
         // Wait 5 second before going to the next
         await new Promise(f => setTimeout(f, 5000))
     }
-    
+
     return {
-      statusCode: 200,
-      body: JSON.stringify({
-        message: "Cron job successfully executed!",
-      }),
-    };
-  };
+        statusCode: 200,
+        body: JSON.stringify({
+            message: "Cron job successfully executed!",
+        }),
+    }
+}

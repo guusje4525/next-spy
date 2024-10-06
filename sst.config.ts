@@ -59,7 +59,8 @@ export default $config({
     return {
       api: trpc.url,
       client: client.url,
-      tableName: table.arn
+      tableName: table.arn,
+      cron: cron.urn
     }
   },
 })
