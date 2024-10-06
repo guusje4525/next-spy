@@ -3,33 +3,34 @@ import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button } 
 import useStore from '../../utils/useStore'
 import { observer } from 'mobx-react-lite'
 import { useProductListStore } from './ProductListStore'
+import DialogTransition from '../../utils/DialogTransition'
 
-const ProductAdd = observer(function ProductAdd () {
-    const productListStore = useProductListStore()
+const ProductAdd = observer(function ProductAdd() {
+  const productListStore = useProductListStore()
 
-    const productAddStore = useStore(sp => ({
-        fields: {
-            id: '0',
-        },
-        dialogOpen: false,
-        closeDialog: () => {
-            productAddStore.dialogOpen = false
-        },
-        openDialog: () => {
-            productAddStore.dialogOpen = true
-        },
-        handleSubmit: async () => {
-            if (Number.isNaN(Number(productAddStore.fields.id))) {
-                return alert('ID can only contain numbers')
-            }
-            productAddStore.closeDialog()
-            sp.productListStore.add(Number(productAddStore.fields.id))
-        },
-        handleChange: (e: React.ChangeEvent<HTMLInputElement>) => {
-            const { value } = e.target
-            productAddStore.fields.id = value
-        }
-    }), { productListStore })
+  const productAddStore = useStore(sp => ({
+    fields: {
+      id: '0',
+    },
+    dialogOpen: false,
+    closeDialog: () => {
+      productAddStore.dialogOpen = false
+    },
+    openDialog: () => {
+      productAddStore.dialogOpen = true
+    },
+    handleSubmit: async () => {
+      if (Number.isNaN(Number(productAddStore.fields.id))) {
+        return alert('ID can only contain numbers')
+      }
+      productAddStore.closeDialog()
+      sp.productListStore.add(Number(productAddStore.fields.id))
+    },
+    handleChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { value } = e.target
+      productAddStore.fields.id = value
+    }
+  }), { productListStore })
 
   return (
     <>
@@ -37,9 +38,9 @@ const ProductAdd = observer(function ProductAdd () {
         Add product
       </Button>
 
-      <Dialog open={productAddStore.dialogOpen} onClose={productAddStore.closeDialog} PaperProps={{ style: { backgroundColor: '#333', color: '#fff' } }}>
+      <Dialog open={productAddStore.dialogOpen} onClose={productAddStore.closeDialog} PaperProps={{ style: { backgroundColor: '#333', color: '#fff' } }} TransitionComponent={DialogTransition}>
         <DialogTitle sx={{ color: '#888', fontWeight: 700 }}>
-            Enter Details
+          Enter Details
         </DialogTitle>
         <DialogContent>
           <TextField

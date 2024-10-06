@@ -16,7 +16,7 @@ const ProductList = observer(function ProductList() {
   return <ProductListStoreProvider store={productListStore}>
     <List sx={{ maxWidth: '400px', m: '0 auto' }}>
       {!productListStore.products.length && <Typography sx={{ color: '#888' }}>No products found</Typography>}
-      {!!productListStore.products.length && <Typography sx={{ color: '#888' }}>Last updated at {productListStore.lastUpdatedText}</Typography>}
+      {!!productListStore.products.length && <Typography sx={{ color: '#888', mb: 4 }}>Last updated at {productListStore.lastUpdatedText}</Typography>}
       {productListStore.products.map(product => <React.Fragment key={product.id}>
         <ListItem secondaryAction={<ProductDeleteDialog id={product.id} />}>
           <ListItemText

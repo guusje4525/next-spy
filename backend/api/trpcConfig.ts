@@ -1,8 +1,10 @@
 import { awsLambdaRequestHandler } from "@trpc/server/adapters/aws-lambda"
 import router from "./router"
 import ProductRouter from './routes/product'
+import ConfigRouter from './routes/config'
 
 const routes = router.router({
+  config: ConfigRouter,
   product: ProductRouter
 })
 

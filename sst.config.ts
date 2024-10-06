@@ -39,7 +39,8 @@ export default $config({
       handler: "backend/api/trpcConfig.handler",
       link: [table],
       environment: {
-        TABLE_NAME: table.arn
+        TABLE_NAME: table.arn,
+        PUSHOVER_TOKEN: process.env.PUSHOVER_TOKEN!
       },
       name: 'Trpc-api',
       description: 'This is the trpc api end point',
