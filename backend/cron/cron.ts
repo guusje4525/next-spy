@@ -17,10 +17,8 @@ export const handler = async () => {
             // Update records
             await ProductEntity.patch(product).set({ price: productData.price, lastUpdatedAt: new Date().toISOString() }).go()
             // If new price is lower than currently saved price
-            if (product.price >= productData.price) {
-                if (config.data[0]?.userId) {
-                    Pushover.send(config.data[0].userId, 'Price updated', `Detected a lower price for ${product.name}`)
-                }
+            if (product.price > productData.price && config.data[0]?.userId) {
+                Pushover.send(config.data[0].userId, 'Price updated', `Detected a lower price($${product.price - productData.price} drop) for ${product.name}`)
             }
         }
         // Wait 5 second before going to the next
