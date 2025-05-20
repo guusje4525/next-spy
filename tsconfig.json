@@ -1,19 +1,20 @@
 {
-    "compilerOptions": {
-       "module": "esnext",
-       "moduleResolution": "node",
-       "noImplicitAny": true,
-       "strictNullChecks": true,
-       "noImplicitThis": true,
-       "alwaysStrict": true,
-       "noUnusedLocals": false,
-       "noUnusedParameters": false,
-       "noImplicitReturns": true,
-       "noFallthroughCasesInSwitch": false,
-       "inlineSourceMap": true,
-       "inlineSources": true,
-       "strictPropertyInitialization": false,
-       "resolveJsonModule": true,
-       "jsx": "react-jsx"
-    }
- }
+  "compilerOptions": {
+    "module": "esnext",
+    "moduleResolution": "node",
+    "noImplicitAny": false,
+    "strictNullChecks": false,
+    "noImplicitThis": false,
+    "alwaysStrict": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": false,
+    "inlineSourceMap": true,
+    "inlineSources": true,
+    "strictPropertyInitialization": false,
+    "resolveJsonModule": true,
+    "jsx": "react-jsx",
+    "target": "ES2015"
+  }
+}

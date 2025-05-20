@@ -1,10 +1,11 @@
 {
-  "name": "aws-trpc",
+  "name": "next-spy",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "start": "npx sst dev",
+    "deploy": "npx sst deploy",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

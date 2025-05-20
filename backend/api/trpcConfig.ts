@@ -2,10 +2,12 @@ import { awsLambdaRequestHandler } from "@trpc/server/adapters/aws-lambda"
 import router from "./router"
 import ProductRouter from './routes/product'
 import ConfigRouter from './routes/config'
+import AuthRouter from './routes/auth'
 
 const routes = router.router({
   config: ConfigRouter,
-  product: ProductRouter
+  product: ProductRouter,
+  auth: AuthRouter
 })
 
 export type Router = typeof routes
