@@ -48,6 +48,7 @@ export default $config({
 
     const client = new sst.aws.StaticSite("Frontend", {
       path: 'frontend',
+      domain: "next-spy.guusje4525.com",
       build: {
         command: 'npm run build',
         output: 'dist'
