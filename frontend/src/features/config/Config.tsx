@@ -49,6 +49,15 @@ const Config = observer(function Config() {
       }
       configStore.loading = false
     },
+    sendTest: async () => {
+      await apiClient.config.set.mutate({ pushOverId: configStore.fields.pushOverId })
+      try {
+        await apiClient.config.sendTest.query()
+        alert("Notification send")
+      } catch (error: any) {
+        console.log("oops", error)
+      }
+    },
   }))
 
   useEffect(() => {
@@ -67,7 +76,7 @@ const Config = observer(function Config() {
         slotProps={{
           paper: {
             style: {
-              width: "400px",
+              width: "500px",
             },
           },
           transition: DialogTransition,
@@ -78,17 +87,32 @@ const Config = observer(function Config() {
           {configStore.loading && <Typography>Loading...</Typography>}
           {!configStore.loading && (
             <FormControl fullWidth>
-              <FormLabel htmlFor="username">Pushover user ID</FormLabel>
-              <TextField
-                autoFocus
-                margin="dense"
-                value={configStore.fields.pushOverId}
-                onChange={configStore.handleChange}
-                fullWidth
-                InputLabelProps={{ style: { color: "#888" } }}
-                InputProps={{ style: { color: "#fff" } }}
-                sx={{ "& .MuiOutlinedInput-root": { "& fieldset": { borderColor: "#555" }, "&:hover fieldset": { borderColor: "#888" } } }}
-              />
+              <Box display="flex" alignItems="center" gap={2} mb={2}>
+                <FormLabel htmlFor="username" sx={{ whiteSpace: "nowrap", minWidth: "150px", mt: "8px" }}>
+                  Pushover user ID
+                </FormLabel>
+                <TextField
+                  id="username"
+                  autoFocus
+                  margin="dense"
+                  value={configStore.fields.pushOverId}
+                  onChange={configStore.handleChange}
+                  fullWidth
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": { borderColor: "#555" },
+                      "&:hover fieldset": { borderColor: "#888" },
+                    },
+                  }}
+                />
+              </Box>
+
+              <Box display="flex" alignItems="center" gap={2}>
+                <FormLabel sx={{ whiteSpace: "nowrap", minWidth: "150px", mt: "8px" }}>Send test notification</FormLabel>
+                <Button variant="outlined" color="primary" fullWidth onClick={configStore.sendTest}>
+                  Send
+                </Button>
+              </Box>
             </FormControl>
           )}
         </DialogContent>

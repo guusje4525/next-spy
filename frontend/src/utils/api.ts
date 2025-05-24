@@ -17,13 +17,19 @@ export default createTRPCClient<Router>({
 
         let handled = false
 
-        for (const x of responses) {
-          if (x.error?.message === "jwt expired" && !handled) {
-            handled = true
-            delete localStorage.token
-            alert("Authentication expired, please login again")
-            window.location.reload()
-            return response
+        if (!response.ok) {
+          for (const x of responses) {
+            if (x.error?.message === "jwt expired" && !handled) {
+              handled = true
+              delete localStorage.token
+              alert("Authentication expired, please login again")
+              window.location.reload()
+              return response
+            } else if (!handled) {
+              handled = true
+              alert(x.error?.message)
+              return response
+            }
           }
         }
 
