@@ -1,5 +1,6 @@
 import { Entity, EntityItem } from "electrodb"
 import dbConfig from "../config"
+import { z } from "zod"
 
 export const UserChallengeEntity = new Entity(
   {
@@ -26,7 +27,7 @@ export const UserChallengeEntity = new Entity(
         },
         sk: {
           field: "sk",
-          composite: ["userId"],
+          composite: ["userId", "challenge"],
         },
       },
     },
@@ -35,3 +36,9 @@ export const UserChallengeEntity = new Entity(
 )
 
 export type UserChallengeEntityType = EntityItem<typeof UserChallengeEntity>
+
+export const UserChallengeSchema = z.object({
+  userId: z.string(),
+  challenge: z.string(),
+})
+export type UserChallengeDto = z.output<typeof UserChallengeSchema>

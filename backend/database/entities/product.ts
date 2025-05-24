@@ -1,5 +1,5 @@
-import { Entity, EntityItem } from 'electrodb'
-import dbConfig from '../config'
+import { Entity, EntityItem } from "electrodb"
+import dbConfig from "../config"
 
 export const ProductEntity = new Entity(
   {
@@ -11,22 +11,26 @@ export const ProductEntity = new Entity(
     attributes: {
       id: {
         type: "number",
-        required: true
+        required: true,
+      },
+      userId: {
+        type: "string",
+        required: true,
       },
       price: {
         type: "number",
         required: true,
-        default: 0
+        default: 0,
       },
       name: {
-        type: 'string',
-        required: true
+        type: "string",
+        required: true,
       },
       lastUpdatedAt: {
-        type: 'string',
+        type: "string",
         required: true,
         default: new Date().toISOString(),
-      }
+      },
     },
     indexes: {
       primary: {
@@ -36,7 +40,7 @@ export const ProductEntity = new Entity(
         },
         sk: {
           field: "sk",
-          composite: ["id"],
+          composite: ["id", "userId"],
         },
       },
     },

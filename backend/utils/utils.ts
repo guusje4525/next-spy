@@ -4,3 +4,5 @@ export function base64urlToBuffer(base64url: string): Uint8Array {
   const binary = Buffer.from(padded, "base64")
   return new Uint8Array(binary)
 }
+
+export const secretKey = "DERTFYUGIHJKLNM<NHVG"

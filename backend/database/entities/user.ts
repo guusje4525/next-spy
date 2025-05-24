@@ -1,5 +1,6 @@
-import { Entity, EntityItem } from "electrodb";
-import dbConfig from "../config";
+import { Entity, EntityItem } from "electrodb"
+import dbConfig from "../config"
+import { z } from "zod"
 
 export const UserEntity = new Entity(
   {
@@ -46,6 +47,16 @@ export const UserEntity = new Entity(
     },
   },
   dbConfig
-);
+)
 
-export type UserEntityType = EntityItem<typeof UserEntity>;
+export type UserEntityType = EntityItem<typeof UserEntity>
+
+export const UserSchema = z.object({
+  id: z.string(),
+  credentials: z.object({
+    credentialID: z.string(),
+    credentialPublicKey: z.string(),
+    counter: z.number(),
+  }),
+})
+export type UserDto = z.output<typeof UserSchema>

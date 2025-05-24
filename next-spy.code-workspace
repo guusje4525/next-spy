@@ -1,0 +1,48 @@
+{
+  "folders": [
+    {
+      "path": "."
+    },
+    {
+      "path": "frontend"
+    },
+    {
+      "path": "backend"
+    }
+  ],
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Start",
+        "type": "shell",
+        "command": "npm start",
+        "isBackground": true,
+        "group": "build",
+        "icon": { "id": "server" },
+        "presentation": {
+          "group": "check_and_build"
+        },
+        "problemMatcher": [
+          { "base": "$tsc-watch", "applyTo": "allDocuments" },
+          { "base": "$eslint-stylish", "applyTo": "allDocuments" }
+        ]
+      },
+      {
+        "label": "Delete and Install Node Modules",
+        "type": "shell",
+        "command": "rm -rf node_modules && rm -rf ./frontend/node_modules && npm install && cd ./frontend && npm install",
+        "group": "build",
+        "icon": { "id": "trashcan" }
+      }
+    ]
+  },
+  "settings": {
+    "workbench.tree.indent": 24,
+    "explorer.compactFolders": false,
+    "task.allowAutomaticTasks": "on",
+    "search.exclude": {
+      "tsconfig.tsbuildinfo": true
+    }
+  }
+}

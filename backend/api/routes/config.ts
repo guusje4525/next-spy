@@ -1,18 +1,14 @@
 import { z } from "zod"
-import router from "../router"
+import { router, protectedProcedure } from "../router"
 import { ConfigEntity } from "../../database/entities/config"
 
-export default router.router({
-    get: router.procedure
-        .query(async () => {
-            const config = await ConfigEntity.query.primary({}).go({ pages: 'all', limit: 1 })
-            return config.data[0] || null
-        }),
+export default router({
+  get: protectedProcedure.query(async ({ ctx: { userId } }) => {
+    const config = await ConfigEntity.query.primary({ userId }).go({ pages: "all", limit: 1 })
+    return config.data[0] || null
+  }),
 
-    set: router.procedure
-        .input(z.object({ userId: z.string() }))
-        .mutation(async ({ input: { userId } }) => {
-            await ConfigEntity.delete({}).go()
-            await ConfigEntity.create({ userId }).go()
-        }),
+  set: protectedProcedure.input(z.object({ pushOverId: z.string() })).mutation(async ({ ctx: { userId }, input: { pushOverId } }) => {
+    await ConfigEntity.put({ userId, pushOverId }).go()
+  }),
 })
