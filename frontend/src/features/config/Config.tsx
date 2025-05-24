@@ -9,124 +9,87 @@ import DialogContent from "@mui/material/DialogContent"
 import TextField from "@mui/material/TextField"
 import DialogTitle from "@mui/material/DialogTitle"
 import Dialog from "@mui/material/Dialog"
-import DialogTransition from "../../utils/DialogTransition"
-import apiClient from "../../utils/api"
 import Typography from "@mui/material/Typography"
 import { useEffect } from "react"
 import FormLabel from "@mui/material/FormLabel"
 import FormControl from "@mui/material/FormControl"
+import ConfigStore from "./ConfigStore"
 
 const Config = observer(function Config() {
-  const configStore = useStore(() => ({
-    loading: false,
-    config: {
-      pushOverId: "",
-    },
-    fields: {
-      pushOverId: "",
-    },
-    dialogOpen: false,
+    const configStore = useStore(() => new ConfigStore())
 
-    closeDialog: () => {
-      configStore.dialogOpen = false
-    },
-    openDialog: () => {
-      configStore.dialogOpen = true
-    },
-    handleSubmit: async () => {
-      await apiClient.config.set.mutate({ pushOverId: configStore.fields.pushOverId })
-      configStore.closeDialog()
-    },
-    handleChange: (e: React.ChangeEvent<HTMLInputElement>) => {
-      const { value } = e.target
-      configStore.fields.pushOverId = value
-    },
-    fetch: async () => {
-      configStore.loading = true
-      const res = await apiClient.config.get.query()
-      if (res?.pushOverId) {
-        configStore.fields.pushOverId = res.pushOverId
-      }
-      configStore.loading = false
-    },
-    sendTest: async () => {
-      await apiClient.config.set.mutate({ pushOverId: configStore.fields.pushOverId })
-      try {
-        await apiClient.config.sendTest.query()
-        alert("Notification send")
-      } catch (error: any) {
-        console.log("oops", error)
-      }
-    },
-  }))
+    useEffect(() => {
+        configStore.fetch()
+    }, [configStore])
 
-  useEffect(() => {
-    configStore.fetch()
-  }, [configStore])
+    return (
+        <Box>
+            <IconButton onClick={configStore.dialog.open}>
+                <SettingsIcon color="info" sx={{ fontSize: "40px", color: "#999" }} />
+            </IconButton>
 
-  return (
-    <Box>
-      <IconButton onClick={configStore.openDialog}>
-        <SettingsIcon color="info" sx={{ fontSize: "40px", color: "#999" }} />
-      </IconButton>
-
-      <Dialog
-        open={configStore.dialogOpen}
-        onClose={configStore.closeDialog}
-        slotProps={{
-          paper: {
-            style: {
-              width: "500px",
-            },
-          },
-          transition: DialogTransition,
-        }}
-      >
-        <DialogTitle sx={{ color: "#888", fontWeight: 700 }}>Configuration</DialogTitle>
-        <DialogContent>
-          {configStore.loading && <Typography>Loading...</Typography>}
-          {!configStore.loading && (
-            <FormControl fullWidth>
-              <Box display="flex" alignItems="center" gap={2} mb={2}>
-                <FormLabel htmlFor="username" sx={{ whiteSpace: "nowrap", minWidth: "150px", mt: "8px" }}>
-                  Pushover user ID
-                </FormLabel>
-                <TextField
-                  id="username"
-                  autoFocus
-                  margin="dense"
-                  value={configStore.fields.pushOverId}
-                  onChange={configStore.handleChange}
-                  fullWidth
-                  sx={{
-                    "& .MuiOutlinedInput-root": {
-                      "& fieldset": { borderColor: "#555" },
-                      "&:hover fieldset": { borderColor: "#888" },
+            <Dialog
+                open={configStore.dialog.visible}
+                onClose={configStore.dialog.close}
+                slotProps={{
+                    paper: {
+                        style: {
+                            width: "500px",
+                        },
                     },
-                  }}
-                />
-              </Box>
+                }}
+            >
+                <DialogTitle sx={{ color: "#888", fontWeight: 700 }}>Configuration</DialogTitle>
+                <DialogContent>
+                    {configStore.loader.isLoading && <Typography>Loading...</Typography>}
+                    {!configStore.loader.isLoading && (
+                        <FormControl fullWidth>
+                            <Box display="flex" alignItems="center" gap={2} mb={2}>
+                                <FormLabel htmlFor="username" sx={{ whiteSpace: "nowrap", minWidth: "150px", mt: "8px" }}>
+                                    Pushover user ID
+                                </FormLabel>
+                                <TextField
+                                    id="username"
+                                    autoFocus
+                                    margin="dense"
+                                    value={configStore.fields.pushOverId}
+                                    onChange={configStore.handleChange}
+                                    fullWidth
+                                    sx={{
+                                        "& .MuiOutlinedInput-root": {
+                                            "& fieldset": { borderColor: "#555" },
+                                            "&:hover fieldset": { borderColor: "#888" },
+                                        },
+                                    }}
+                                />
+                            </Box>
 
-              <Box display="flex" alignItems="center" gap={2}>
-                <FormLabel sx={{ whiteSpace: "nowrap", minWidth: "150px", mt: "8px" }}>Send test notification</FormLabel>
-                <Button variant="outlined" color="primary" fullWidth onClick={configStore.sendTest}>
-                  Send
-                </Button>
-              </Box>
-            </FormControl>
-          )}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={configStore.closeDialog} sx={{ color: "#888" }}>
-            Cancel
-          </Button>
-          <Button onClick={configStore.handleSubmit} sx={{ color: "#888" }}>
-            Save
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </Box>
-  )
+                            <Box display="flex" alignItems="center" gap={2}>
+                                <FormLabel sx={{ whiteSpace: "nowrap", minWidth: "150px", mt: "8px" }}>Send test notification</FormLabel>
+                                <Button
+                                    variant="outlined"
+                                    color="primary"
+                                    fullWidth
+                                    onClick={configStore.sendTest}
+                                    loading={configStore.sendTestLoader.isLoading}
+                                >
+                                    Send
+                                </Button>
+                            </Box>
+                        </FormControl>
+                    )}
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={configStore.dialog.close} sx={{ color: "#888" }}>
+                        Cancel
+                    </Button>
+                    <Button onClick={configStore.handleSubmit} sx={{ color: "#888" }} loading={configStore.loader.isLoading}>
+                        Save
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        </Box>
+    )
 })
 
 export default Config

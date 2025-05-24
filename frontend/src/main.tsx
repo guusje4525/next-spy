@@ -6,15 +6,15 @@ import Auth from "./features/Auth.tsx"
 import AppTheme from "./theme/AppTheme.tsx"
 
 configure({
-  enforceActions: "never",
+    enforceActions: "never",
 })
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <AppTheme>
-      <Auth>
-        <App />
-      </Auth>
-    </AppTheme>
-  </StrictMode>
+    <StrictMode>
+        <AppTheme>
+            <Auth>
+                <App />
+            </Auth>
+        </AppTheme>
+    </StrictMode>
 )

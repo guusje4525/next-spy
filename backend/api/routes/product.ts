@@ -2,6 +2,7 @@ import { z } from "zod"
 import { router, protectedProcedure } from "../router"
 import { ProductEntity } from "../../database/entities/product"
 import pricespy from "../../cron/pricespy"
+import { ulid } from "ulid"
 
 export default router({
     list: protectedProcedure.query(async ({ ctx: { userId } }) => {
@@ -13,7 +14,8 @@ export default router({
         const data = await pricespy(input.id)
         if (data) {
             return await ProductEntity.create({
-                id: input.id,
+                id: ulid(),
+                pricespyId: input.id,
                 name: data.name,
                 price: data.price,
                 userId,
@@ -23,7 +25,7 @@ export default router({
         }
     }),
 
-    delete: protectedProcedure.input(z.object({ id: z.number() })).mutation(async ({ input, ctx: { userId } }) => {
+    delete: protectedProcedure.input(z.object({ id: z.string() })).mutation(async ({ input, ctx: { userId } }) => {
         await ProductEntity.delete({
             id: input.id,
             userId,
