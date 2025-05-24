@@ -19,8 +19,10 @@ export default class ProductListStore {
     }
 
     fetch = async () => {
-        const products = await apiClient.product.list.query()
-        this.products = products
+        await this.loader.executeLoading(async () => {
+            const products = await apiClient.product.list.query()
+            this.products = products
+        })
     }
 
     delete = async (id: string) => {
