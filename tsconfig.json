@@ -1,20 +1,23 @@
 {
-  "compilerOptions": {
-    "module": "esnext",
-    "moduleResolution": "node",
-    "noImplicitAny": false,
-    "strictNullChecks": false,
-    "noImplicitThis": false,
-    "alwaysStrict": false,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": false,
-    "inlineSourceMap": true,
-    "inlineSources": true,
-    "strictPropertyInitialization": false,
-    "resolveJsonModule": true,
-    "jsx": "react-jsx",
-    "target": "ES2015"
-  }
+    "compilerOptions": {
+        "module": "esnext",
+        "moduleResolution": "node",
+        "noImplicitAny": false,
+        "strictNullChecks": false,
+        "noImplicitThis": false,
+        "alwaysStrict": false,
+        "noUnusedLocals": false,
+        "noUnusedParameters": false,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": false,
+        "inlineSourceMap": true,
+        "inlineSources": true,
+        "strictPropertyInitialization": false,
+        "resolveJsonModule": true,
+        "jsx": "react-jsx",
+        "target": "ES2015",
+        "allowSyntheticDefaultImports": true,
+        "typeRoots": ["./node_modules/@types", "./types", "./backend/types"]
+    },
+    "include": ["backend/**/*", "types/**/*"]
 }

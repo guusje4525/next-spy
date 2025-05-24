@@ -23,11 +23,11 @@ export const handler = async () => {
                 .go()
             // If new price is lower than currently saved price
             if (product.price > productData.price && config.data[0]?.userId) {
-                Pushover.send(
-                    config.data[0].userId,
-                    "Price updated",
-                    `Detected a lower price($${product.price - productData.price} drop) for ${product.name}`
-                )
+                await Pushover.send({
+                    pushOverId: config.data[0].userId,
+                    title: "Price updated",
+                    description: `Detected a lower price($${product.price - productData.price} drop) for ${product.name}`,
+                })
             }
         }
         // Wait 5 second before going to the next

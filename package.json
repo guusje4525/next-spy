@@ -19,13 +19,14 @@
     "@trpc/server": "^11.0.0-rc.528",
     "electrodb": "^2.15.0",
     "jsonwebtoken": "^9.0.2",
-    "node-pushover": "^1.0.0",
+    "pushover-notifications": "^1.2.3",
     "sst": "latest",
     "ulid": "^3.0.0",
     "zod": "^3.22.4"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.145",
+    "@types/jsonwebtoken": "^9.0.9",
     "@types/node": "^22.7.4"
   }
 }
