@@ -65,7 +65,10 @@ export default class PasskeyService {
             },
         })
 
-        if (!verification.verified) throw new Error("Authentication failed")
+        if (!verification.verified) {
+            console.log({ verification })
+            throw new Error("Authentication failed")
+        }
 
         return verification.authenticationInfo.newCounter
     }
