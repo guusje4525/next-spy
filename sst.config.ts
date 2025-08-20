@@ -1,5 +1,10 @@
 /// <reference path="./.sst/platform/config.d.ts" />
 
+import { TableStack } from "./stacks/TableStack";
+import { CronStack } from "./stacks/CronStack";
+import { ApiStack } from "./stacks/ApiStack";
+import { SiteStack } from "./stacks/SiteStack";
+
 export default $config({
     app(input) {
         return {
@@ -9,62 +14,23 @@ export default $config({
         }
     },
     async run() {
-        const table = new sst.aws.Dynamo("MainTable", {
-            fields: {
-                pk: "string",
-                sk: "string",
-            },
-            primaryIndex: {
-                hashKey: "pk",
-                rangeKey: "sk",
-            },
-        })
+        // Create the table stack
+        const { table, tableName } = TableStack()
 
-        const cron = new sst.aws.Cron("MyCronJob", {
-            schedule: "rate(4 hours)",
-            job: {
-                handler: "backend/cron/cron.handler",
-                timeout: "60 seconds",
-                environment: {
-                    TABLE_NAME: table.arn,
-                },
-                link: [table],
-                name: "Cron-service",
-                description: "This runs every 4 hours to update our cache",
-            },
-        })
+        // Create the cron stack with table dependency
+        const { cron, cronUrn } = CronStack({ table })
 
-        const trpc = new sst.aws.Function("Trpc", {
-            url: true,
-            handler: "backend/api/trpcConfig.handler",
-            link: [table],
-            environment: {
-                TABLE_NAME: table.arn,
-                PUSHOVER_TOKEN: process.env.PUSHOVER_TOKEN!,
-                RPID: process.env.RPID,
-                ORIGIN: process.env.ORIGIN,
-            },
-            name: "Trpc-api",
-            description: "This is the trpc api end point",
-        })
+        // Create the API stack with table dependency
+        const { trpc, apiUrl } = ApiStack({ table })
 
-        const client = new sst.aws.StaticSite("Frontend", {
-            path: "frontend",
-            domain: "next-spy.guusje4525.com",
-            build: {
-                command: "npm run build",
-                output: "dist",
-            },
-            environment: {
-                VITE_API_URL: trpc.url,
-            },
-        })
+        // Create the site stack with API URL dependency
+        const { client, clientUrl } = SiteStack({ apiUrl })
 
         return {
-            api: trpc.url,
-            client: client.url,
-            tableName: table.arn,
-            cron: cron.urn,
+            api: apiUrl,
+            client: clientUrl,
+            tableName: tableName,
+            cron: cronUrn,
         }
     },
 })
