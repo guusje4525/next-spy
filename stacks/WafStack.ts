@@ -4,14 +4,15 @@ import * as aws from "@pulumi/aws"
 
 interface WafStackProps {
   apiGateway: sst.aws.ApiGatewayV2
-  hostedZoneName: string
 }
 
-export async function WafStack({ apiGateway, hostedZoneName }: WafStackProps) {
+export async function WafStack({ apiGateway }: WafStackProps) {
   // Create WAF Web ACL in us-east-1 (required for CloudFront)
   const usEast1Provider = new aws.Provider("us-east-1-provider", {
     region: "us-east-1",
   })
+
+  const hostedZoneName = process.env.HOSTED_DOMAIN
 
   const customDomain = `api.${hostedZoneName}`
 
@@ -119,9 +120,8 @@ export async function WafStack({ apiGateway, hostedZoneName }: WafStackProps) {
       },
       accessControlAllowOrigins: {
         items: [
-          "https://next-spy.guusje4525.com",
+          `https://${hostedZoneName}`,
           "http://localhost:5173",
-          "http://localhost:3000",
         ],
       },
       accessControlExposeHeaders: {
@@ -232,7 +232,6 @@ export async function WafStack({ apiGateway, hostedZoneName }: WafStackProps) {
   const cloudfrontUrl = $interpolate`https://${customDomain}`
 
   // Log the rate limit settings
-  console.log("WAF Rate Limit configured: 100 requests per 5-minute window per IP")
   console.log(`Custom API domain configured: ${customDomain}`)
   console.log(`SSL Certificate created for: ${customDomain}`)
   console.log(`SSL Certificate validation configured`)
@@ -242,7 +241,7 @@ export async function WafStack({ apiGateway, hostedZoneName }: WafStackProps) {
     webAcl,
     webAclArn: webAcl.arn,
     distribution,
-    cloudfrontUrl,
+    apiUrl: cloudfrontUrl,
     cloudfrontDomain: distribution.domainName,
     certificate,
     certificateValidation,

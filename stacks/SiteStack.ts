@@ -1,9 +1,10 @@
 interface SiteStackProps {
     apiUrl: sst.aws.Function["url"]
-    hostedZoneName: string
 }
 
-export function SiteStack({ apiUrl, hostedZoneName }: SiteStackProps) {
+export function SiteStack({ apiUrl }: SiteStackProps) {
+    const hostedZoneName = process.env.HOSTED_DOMAIN
+
     const client = new sst.aws.StaticSite("Frontend", {
         path: "frontend",
         domain: hostedZoneName,
@@ -16,8 +17,5 @@ export function SiteStack({ apiUrl, hostedZoneName }: SiteStackProps) {
         },
     })
 
-    return {
-        client,
-        clientUrl: client.url,
-    }
+    return { client }
 }

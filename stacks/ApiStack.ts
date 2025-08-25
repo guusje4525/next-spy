@@ -3,6 +3,8 @@ interface ApiStackProps {
 }
 
 export function ApiStack({ table }: ApiStackProps) {
+    const hostedZoneName = process.env.HOSTED_DOMAIN
+
     const apiGateway = new sst.aws.ApiGatewayV2("MyApi", {
         transform: {
             route: {
@@ -17,10 +19,9 @@ export function ApiStack({ table }: ApiStackProps) {
             allowHeaders: ["*"],
             allowMethods: ["*"],
             allowOrigins: [
-                "https://next-spy.guusje4525.com",
+                `https://${hostedZoneName}`,
                 "http://localhost:5173",
-                "http://localhost:3000",
-                "https://api.next-spy.guusje4525.com",
+                `https://api.${hostedZoneName}`,
             ],
             exposeHeaders: ["*"],
             maxAge: "24 hours",
@@ -34,7 +35,7 @@ export function ApiStack({ table }: ApiStackProps) {
             PUSHOVER_TOKEN: process.env.PUSHOVER_TOKEN!,
             RPID: process.env.RPID || "Not set",
             ORIGIN: process.env.ORIGIN || "Not set",
-            ALLOWED_ORIGINS: "https://next-spy.guusje4525.com,http://localhost:5173,http://localhost:3000,https://api.next-spy.guusje4525.com",
+            ALLOWED_ORIGINS: `https://${hostedZoneName},http://localhost:5173,https://api.${hostedZoneName}`,
         },
         link: [table],
         name: "Trpc-api",

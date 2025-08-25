@@ -6,8 +6,6 @@ import { ApiStack } from "./stacks/ApiStack";
 import { SiteStack } from "./stacks/SiteStack";
 import { WafStack } from "./stacks/WafStack";
 
-const hostedZoneName = "next-spy.guusje4525.com"
-
 export default $config({
     app(input) {
         return {
@@ -27,24 +25,19 @@ export default $config({
         const { apiGateway } = ApiStack({ table })
 
         // Create the WAF stack with CloudFront for rate limiting and security
-        // Uncomment the line below and set your desired API subdomain
-        const { webAclArn, cloudfrontUrl, cloudfrontDomain } = await WafStack({ 
-          apiGateway: apiGateway, 
-          hostedZoneName
-        })
+        const { webAclArn, apiUrl, cloudfrontDomain } = await WafStack({ apiGateway })
 
-        // IMPORTANT: Update the site stack to use CloudFront URL instead of direct API URL
-        // Pass the CloudFront URL to your frontend
-        const { clientUrl } = SiteStack({ apiUrl: cloudfrontUrl, hostedZoneName })
+        // Create the site stack with CloudFront URL
+        const { client } = SiteStack({ apiUrl })
 
         return {
-            api: apiGateway.url, // Direct API URL (for debugging/direct access)
-            apiCloudfront: cloudfrontUrl, // CloudFront URL (use this in production)
-            client: clientUrl,
+            directApi: apiGateway.url,
+            cloudfrontApiUrl: apiUrl,
+            client: client.url,
             tableName: tableName,
             cron: cronUrn,
             waf: webAclArn,
-            cloudfrontDomain: cloudfrontDomain, // Raw domain if you need to set up custom domain
+            cloudfrontDomain: cloudfrontDomain,
         }
     },
 })
