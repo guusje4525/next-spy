@@ -1,11 +1,12 @@
 interface SiteStackProps {
     apiUrl: sst.aws.Function["url"]
+    hostedZoneName: string
 }
 
-export function SiteStack({ apiUrl }: SiteStackProps) {
+export function SiteStack({ apiUrl, hostedZoneName }: SiteStackProps) {
     const client = new sst.aws.StaticSite("Frontend", {
         path: "frontend",
-        domain: "next-spy.guusje4525.com",
+        domain: hostedZoneName,
         build: {
             command: "npm run build",
             output: "dist",

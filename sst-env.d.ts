@@ -13,9 +13,8 @@ declare module "sst" {
       "name": string
       "type": "sst.aws.Dynamo"
     }
-    "Trpc": {
-      "name": string
-      "type": "sst.aws.Function"
+    "MyApi": {
+      "type": "sst.aws.ApiGatewayV2"
       "url": string
     }
   }
